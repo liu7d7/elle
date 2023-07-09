@@ -1,0 +1,14 @@
+{
+  "name" : "elle",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "453d496badb8b7d9e2b8b5bd5ebc07eb8d61efb9",
+  "dependencies" : [ {
+    "name" : "assimp",
+    "version>=" : "5.2.5",
+    "$comment" : "    # this is heuristically generated, and may not be correct\n\n    find_package(assimp CONFIG REQUIRED)\n\n    target_link_libraries(main PRIVATE assimp::assimp)\n"
+  }, {
+    "name" : "cpptoml",
+    "version>=" : "v0.1.1#2",
+    "$comment" : "    # this is heuristically generated, and may not be correct\n\n    find_package(cpptoml CONFIG REQUIRED)\n\n    target_link_libraries(main PRIVATE cpptoml)\n"
+  } ]
+}

@@ -1,0 +1,140 @@
+[torso]
+offset = 0.0
+
+[collarbone]
+offset = 0.6
+parent = "torso"
+
+[neck]
+offset = 0.3
+parent = "collarbone"
+
+[neck.obj]
+path = "spherewoutline.obj"
+scale = [0.2, 0.2, 0.2]
+
+[hat]
+offset = 0.21
+parent = "neck"
+
+[hat.obj]
+path = "hat.obj"
+scale = [0.2, 0.2, 0.2]
+
+[left_hair_0]
+offset = 0.2
+parent = "neck"
+
+[left_hair_0.obj]
+path = "spherewoutlinewide.obj"
+scale = [0.045, 0.045, 0.045]
+
+[right_hair_0]
+offset = 0.2
+parent = "neck"
+
+[right_hair_0.obj]
+path = "spherewoutlinewide.obj"
+scale = [0.045, 0.045, 0.045]
+
+[left_hair_1]
+offset = 0.2
+parent = "left_hair_0"
+
+[right_hair_1]
+offset = 0.2
+parent = "right_hair_0"
+
+[left_hair_2]
+offset = 0.2
+parent = "left_hair_1"
+
+[right_hair_2]
+offset = 0.2
+parent = "right_hair_1"
+
+[left_hair_3]
+offset = 0.2
+parent = "left_hair_2"
+
+[right_hair_3]
+offset = 0.2
+parent = "right_hair_2"
+
+[left_hair_4]
+offset = 0.2
+parent = "left_hair_3"
+
+[left_hair_4.obj]
+path = "spherewoutlinewide.obj"
+scale = [0.045, 0.045, 0.045]
+
+[right_hair_4]
+offset = 0.2
+parent = "right_hair_3"
+
+[right_hair_4.obj]
+path = "spherewoutlinewide.obj"
+scale = [0.045, 0.045, 0.045]
+
+[left_shoulder]
+offset = 0.125
+parent = "collarbone"
+
+[right_shoulder]
+offset = 0.125
+parent = "collarbone"
+
+[left_bicep]
+offset = 0.25
+parent = "left_shoulder"
+
+[right_bicep]
+offset = 0.25
+parent = "right_shoulder"
+
+[left_hand]
+offset = 0.3
+parent = "left_bicep"
+
+[right_hand]
+offset = 0.3
+parent = "right_bicep"
+
+[left_pelvis]
+offset = 0.125
+parent = "torso"
+
+[right_pelvis]
+offset = 0.125
+parent = "torso"
+
+[left_thigh]
+offset = 0.5
+parent = "left_pelvis"
+
+[right_thigh]
+offset = 0.5
+parent = "right_pelvis"
+
+[left_calf]
+offset = 0.45
+parent = "left_thigh"
+
+[right_calf]
+offset = 0.45
+parent = "right_thigh"
+
+[hilt]
+offset = 0.1
+parent = "right_hand"
+width = 0.015
+
+[hilt.obj]
+path = "hilt.obj"
+scale = [0.05, 0.05, 0.05]
+
+[blade]
+offset = 1.0
+parent = "hilt"
+width = 0.015

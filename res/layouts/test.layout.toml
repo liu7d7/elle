@@ -1,0 +1,10 @@
+[root]
+offset = 0.0
+
+[seg_1]
+offset = 1.0
+parent = "root"
+
+[seg_2]
+offset = 1.0
+parent = "seg_1"
