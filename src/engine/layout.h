@@ -20,6 +20,8 @@ namespace engine {
     void pose_lerp(pose const& begin, pose const& end, float delta);
 
     void pose(pose const& p);
+
+    struct pose extract_pose();
   };
 
   template<typename T>

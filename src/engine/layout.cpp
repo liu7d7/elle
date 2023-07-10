@@ -66,8 +66,26 @@ namespace engine {
   }
 
   void layout::pose_lerp(struct pose const& begin, struct pose const& end, float delta) {
-    for (auto const& [k, v] : joints) {
-      v->rot = glm::slerp(at_or(begin.rotations, k, glm::identity<quat>()), at_or(end.rotations, k, glm::identity<quat>()), delta);
+    for (auto const& [k, joint] : joints) {
+      constexpr auto unit_y = vec3{0, 1, 0};
+      auto q_u = at_or(begin.rotations, k, glm::identity<quat>());
+      auto q_v = at_or(end.rotations, k, glm::identity<quat>());
+//      auto u = q_u * unit_y;
+//      auto v = q_v * unit_y;
+//      auto axis = normalize(cross(u, v));
+//      auto angle = acos(dot(u, v)) * glm::clamp(delta, 0.f, 1.f);
+//      auto final = glm::angleAxis(angle, axis) * q_u;
+//      joint->rot = final;
+      joint->rot = glm::slerp(q_u, q_v, delta);
     }
+  }
+
+  struct pose layout::extract_pose() {
+    struct pose p;
+    for (const auto& [k, v] : joints) {
+      p.rotations[k] = extract_rotation(v->fin_rot);
+    }
+
+    return p;
   }
 }

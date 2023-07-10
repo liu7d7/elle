@@ -65,9 +65,12 @@ struct state {
 /* ======================================================other======================================================= */
 
   camera cam{};
-  layout layout{"res/layouts/test.layout.toml"};
+  layout layout{"res/layouts/elle.layout.toml"};
   unordered_map<string, pose> poses{
     {"identity", pose{"res/poses/identity.toml"}},
+    {"standing", pose{"res/poses/elle.standing.toml"}},
+    {"walk_left", pose{"res/poses/elle.walk_left.toml"}},
+    {"walk_right", pose{"res/poses/elle.walk_right.toml"}},
     {"start", pose{"res/poses/test.start.toml"}},
     {"finish", pose{"res/poses/test.finish.toml"}},
   };
@@ -159,7 +162,8 @@ float last_press = 0.f;
 void draw_scene(state& s) {
   s.update_matrices(true);
 
-  s.layout.pose_lerp(s.poses.at("start"), s.poses.at("finish"), glm::clamp((glfw_get_time() - last_press) / 10.f, 0.f, 1.f));
+  string current_foot = int((glfw_get_time() * 2.f - half_pi) / pi) % 2 ? "right_calf" : "left_calf";
+  s.layout.pose_lerp(s.poses.at("walk_left"), s.poses.at("walk_right"), glm::clamp((sinf(glfw_get_time() * 2.f) + 1) * 0.5f, 0.f, 1.f));
   draw_layout(s, s.layout);
 }
 
@@ -167,7 +171,7 @@ void draw_hud(state& s, draw_args const& args) {
   gl_depth_func(GL_ALWAYS);
   s.update_matrices(false);
 
-  s.dank_mono.draw(s, "fps: " + std::to_string(1.f / args.delta_time), {10, 10}, {vec4(s.dark, 1.), 0.5});
+  s.dank_mono.draw(s, "fps: " + std::to_string(1. / double(args.delta_time)), {10, 10}, {vec4(s.dark, 1.), 0.5});
   gl_depth_func(GL_LEQUAL);
 }
 
@@ -270,6 +274,14 @@ int main() {
         string editing;
         std::getline(std::cin, editing);
         editing = trim(editing);
+        auto write_pose = [](const string& name, const pose& pose) {
+          std::ofstream ofs(name);
+          ofs << *pose.as_toml();
+          COUT(*pose.as_toml() << std::endl)
+          ofs.flush();
+          ofs.close();
+        };
+
         if (editing.starts_with("a") && s.layout.joints.contains(s.layout_editor.current_joint) &&
             s.poses.contains(s.layout_editor.current_pose)) {
           std::istringstream iss(editing);
@@ -277,18 +289,17 @@ int main() {
           iss >> _;
           vec3 v;
           iss >> v.x >> v.y >> v.z;
-          vec3 u = s.layout.joints[s.layout_editor.current_joint]->parent->offset_3d;
+          constexpr auto u = vec3{0, 1, 0};
           quat q = u_to_v(u, v);
           s.poses.at(s.layout_editor.current_pose).rotations[s.layout_editor.current_joint] = q;
           s.layout.pose(s.poses.at(s.layout_editor.current_pose));
           COUT(glm::axis(q) << " " << glm::degrees(glm::angle(q)) << " " << u << " " << v << std::endl)
+        } else if (editing.starts_with("extract")) {
+          string name = trim(editing.substr(7));
+          write_pose(name, s.layout.extract_pose());
         } else if (editing.starts_with("save") && s.poses.contains(s.layout_editor.current_pose)) {
           string name = trim(editing.substr(4));
-          std::ofstream ofs(name);
-          ofs << *s.poses.at(s.layout_editor.current_pose).as_toml();
-          COUT(*s.poses.at(s.layout_editor.current_pose).as_toml() << std::endl)
-          ofs.flush();
-          ofs.close();
+          write_pose(name, s.poses.at(s.layout_editor.current_pose));
         } else if (editing.starts_with("quit")) {
           glfw_set_window_should_close(app, true);
           break;

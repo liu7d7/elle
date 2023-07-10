@@ -11,6 +11,7 @@ namespace engine {
     unordered_map<string, quat> rotations;
 
     explicit pose(string const& s);
+    pose() = default;
 
     [[nodiscard]] std::shared_ptr<cpptoml::table> as_toml() const;
   };

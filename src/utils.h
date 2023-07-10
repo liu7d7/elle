@@ -7,6 +7,9 @@
 #include "usings.h"
 
 namespace engine {
+  constexpr float half_pi = glm::half_pi<float>();
+  constexpr float pi = glm::pi<float>();
+
   static string read(string const& path) {
     string out;
     ifstream stream(path);

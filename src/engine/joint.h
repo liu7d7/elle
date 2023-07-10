@@ -31,32 +31,27 @@ namespace engine {
   template<typename T>
   requires is_model_stack_provider<T> && is_mvp_provider<T>
   void draw_joint(T& m_stack, joint const& j, int depth = 0) {
-    mat4 orig = m_stack.model_ref();
+    m_stack.push_model();
+    vec3 offset = j.rot * vec3{0, j.offset, 0};
+
+    if (j.visible && j.parent) {
+      draw_line(m_stack, {0, 0, 0}, offset, j.width, vec3{0});
+    }
+
+    m_stack.model_ref() = glm::translate(m_stack.model_ref(), offset);
 
     if (j.obj.has_value()) {
       auto const& [obj, pos, scale, rot] = j.obj.value();
       m_stack.push_model();
-      m_stack.model_ref() = m_stack.model_ref() * glm::scale(glm::identity<mat4>(), scale);
+      m_stack.model_ref() = m_stack.model_ref() * glm::scale(mat4{1.}, scale) * glm::rotate(mat4{1.}, glm::angle(j.rot), glm::axis(j.rot));
       draw_obj(m_stack, obj);
       m_stack.pop_model();
     }
 
     for (auto const& c : j.children) {
-      m_stack.push_model();
-
-      m_stack.model_ref() = orig * glm::rotate(glm::identity<mat4>(), glm::angle(c->rot), glm::axis(c->rot));
-      c->fin_rot = clear_translation(m_stack.model_ref());
-      c->offset_3d = vec3{clear_translation(m_stack.model_ref()) * vec4{0, c->offset, 0, 1}};
-
-      if (c->visible) {
-        draw_line(m_stack, vec3{0., 0., 0.}, vec3{0, c->offset, 0}, c->width, vec3{0.});
-      }
-
-      m_stack.model_ref() = glm::translate(glm::identity<mat4>(), c->offset_3d) * m_stack.model_ref();
-
       draw_joint(m_stack, *c, depth + 1);
-
-      m_stack.pop_model();
     }
+
+    m_stack.pop_model();
   }
 }
