@@ -162,9 +162,22 @@ float last_press = 0.f;
 void draw_scene(state& s) {
   s.update_matrices(true);
 
-  string current_foot = int((glfw_get_time() * 2.f - half_pi) / pi) % 2 ? "right_calf" : "left_calf";
-  s.layout.pose_lerp(s.poses.at("walk_left"), s.poses.at("walk_right"), glm::clamp((sinf(glfw_get_time() * 2.f) + 1) * 0.5f, 0.f, 1.f));
+  float time = glfw_get_time() * 2.66f;
+  static string last_foot = "";
+  static vec3 last_pos{0.f};
+  static vec3 offset{0.f};
+  string foot = int((time - half_pi) / pi) % 2 ? "right_calf" : "left_calf";
+  vec3 pos = s.layout.at(foot)->final_pos;
+  if (foot == last_foot) {
+    offset += pos - last_pos;
+  }
+  last_foot = std::move(foot);
+  last_pos = pos;
+  s.layout.pose_lerp(s.poses.at("walk_left"), s.poses.at("walk_right"), glm::clamp((sinf(time) + 1) * 0.5f, 0.f, 1.f));
+  s.push_model();
+  s.model_ref() = glm::translate(s.model_ref(), offset);
   draw_layout(s, s.layout);
+  s.pop_model();
 }
 
 void draw_hud(state& s, draw_args const& args) {
@@ -294,12 +307,20 @@ int main() {
           s.poses.at(s.layout_editor.current_pose).rotations[s.layout_editor.current_joint] = q;
           s.layout.pose(s.poses.at(s.layout_editor.current_pose));
           COUT(glm::axis(q) << " " << glm::degrees(glm::angle(q)) << " " << u << " " << v << std::endl)
-        } else if (editing.starts_with("extract")) {
-          string name = trim(editing.substr(7));
-          write_pose(name, s.layout.extract_pose());
         } else if (editing.starts_with("save") && s.poses.contains(s.layout_editor.current_pose)) {
           string name = trim(editing.substr(4));
           write_pose(name, s.poses.at(s.layout_editor.current_pose));
+        } else if (editing.starts_with("impactful")) {
+          string i, joint;
+          std::cin >> i >> joint;
+          float x, y, z, ang;
+          std::cin >> x >> y >> z >> ang;
+          quat q = glm::angleAxis(glm::radians(ang), vec3{x, y, z});
+          stack<shared_ptr<struct joint>> joints;
+          joints.push(s.layout.at(joint));
+          while (!joints.empty()) {
+            
+          }
         } else if (editing.starts_with("quit")) {
           glfw_set_window_should_close(app, true);
           break;

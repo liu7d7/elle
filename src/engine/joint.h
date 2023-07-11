@@ -9,16 +9,15 @@
 namespace engine {
   struct joint : public std::enable_shared_from_this<joint> {
     string name;
-    quat rot{glm::identity<quat>()};
-    mat4 fin_rot{glm::identity<mat4>()};
-    float offset{};
-    vec3 offset_3d{0, 1, 0};
-    bool dark{};
-    float width{0.03f};
-    bool visible{};
     optional<tuple<object, vec3, vec3, quat>> obj;
     vector<shared_ptr<joint>> children;
     shared_ptr<joint> parent{nullptr};
+    quat rot{glm::identity<quat>()};
+    vec3 final_pos{0.};
+    float offset{};
+    float width{0.03f};
+    bool dark{};
+    bool visible{};
 
     explicit joint(string name);
 
@@ -49,6 +48,7 @@ namespace engine {
     }
 
     for (auto const& c : j.children) {
+      c->final_pos = j.final_pos + offset;
       draw_joint(m_stack, *c, depth + 1);
     }
 

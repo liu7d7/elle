@@ -21,6 +21,10 @@ namespace engine {
 
     void pose(pose const& p);
 
+    [[nodiscard]] const shared_ptr<joint>& at(string const& s) const {
+      return joints.at(s);
+    }
+
     struct pose extract_pose();
   };
 

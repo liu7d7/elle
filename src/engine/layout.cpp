@@ -79,13 +79,4 @@ namespace engine {
       joint->rot = glm::slerp(q_u, q_v, delta);
     }
   }
-
-  struct pose layout::extract_pose() {
-    struct pose p;
-    for (const auto& [k, v] : joints) {
-      p.rotations[k] = extract_rotation(v->fin_rot);
-    }
-
-    return p;
-  }
 }
