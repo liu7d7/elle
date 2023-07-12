@@ -1,6 +1,6 @@
 # Blender 3.5.1
 # www.blender.org
-mtllib line_midres.mtl
+mtllib glob.mtl
 o Cylinder
 v 0.000000 0.000000 -0.500000
 v 0.000000 1.000000 -0.500000

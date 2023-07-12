@@ -54,7 +54,7 @@ namespace engine {
       glfw_window_hint(GLFW_CONTEXT_VERSION_MAJOR, 4);
       glfw_window_hint(GLFW_CONTEXT_VERSION_MINOR, 6);
       glfw_window_hint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-      glfw_window_hint(GLFW_RESIZABLE, GL_FALSE);
+      glfw_window_hint(GLFW_RESIZABLE, GL_TRUE);
       m_handle = glfw_create_window(width, height, this->name.c_str(), nullptr, nullptr);
       if (!m_handle) {
         throw std::runtime_error("failed to create GLFW window!");
@@ -147,12 +147,12 @@ namespace engine {
 
     void run() {
       static int age = 0;
-      static float last_time = glfw_get_time();
+      static double last_time = glfw_get_time();
       while (!glfw_window_should_close(m_handle)) {
         glfw_poll_events();
         auto [j, tick_delta] = update_ticks();
         for (int i = 0; i < std::min(10, j); i++) {
-          update(state.value(), {age});
+          update(state.value(), update_args{.age = age});
           age++;
         }
         draw(state.value(), {glfw_get_time() - last_time});

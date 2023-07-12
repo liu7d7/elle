@@ -28,7 +28,7 @@ namespace engine {
   };
 
   struct draw_args {
-    float delta_time;
+    double delta_time;
   };
 
   struct update_args {

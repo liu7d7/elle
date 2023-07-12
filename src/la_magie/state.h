@@ -60,8 +60,14 @@ namespace la_magie {
 
 /* =====================================================palette====================================================== */
 
-    const vec3 dark = vec3(0.24, 0.14, 0.23);
-    const vec3 light = vec3(0.96, 0.93, 0.9);
+    vec3 dark = vec3(0.24, 0.14, 0.23);
+    vec3 light = vec3(0.96, 0.93, 0.9);
+    const std::vector<vec4> palette{
+      vec4(0.97, 0.89, 0.77, 1),
+      vec4(0.8, 0.2, 0.58, 0.66),
+      vec4(0.42, 0.12, 0.69, 0.33),
+      vec4(0.04, 0.02, 0.19, 0),
+    };
 
 /* ======================================================other======================================================= */
 
@@ -103,6 +109,18 @@ namespace la_magie {
         0, 0, 0, 0, 0, 1,
         0, 0, 1, 0, 0, 1,
       });
+      dither.array("palette", 256);
+      gl_use_program(dither);
+      dither.set("palette_size", int(palette.size()));
+      for (int i = 0; i < palette.size(); i++) {
+        dither.set("palette[" + std::to_string(i) + "]", palette[i]);
+      }
+      dark = vec3(*std::min_element(palette.begin(), palette.end(), [](vec4 const& lhs, vec4 const& rhs) {
+        return lhs.w < rhs.w;
+      }));
+      light = vec3(*std::max_element(palette.begin(), palette.end(), [](vec4 const& lhs, vec4 const& rhs) {
+        return lhs.w < rhs.w;
+      }));
     }
 
     void push_model() {

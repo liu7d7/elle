@@ -1,6 +1,6 @@
 # Blender 3.5.1
 # www.blender.org
-mtllib hat.mtl
+mtllib glob.mtl
 o white
 v -0.000000 0.000000 -0.392849
 v 0.076641 0.000000 -0.385300

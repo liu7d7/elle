@@ -28,8 +28,8 @@ namespace engine {
     update();
   }
 
-  void camera::key(keybind direction, float delta_time) {
-    float velocity = speed * delta_time;
+  void camera::key(keybind direction, double delta_time) {
+    auto velocity = float(speed * delta_time);
     if (direction == keybind::forward)
       velo += normalize(front * glm::vec3(1, 0, 1)) * velocity;
     if (direction == keybind::backward)

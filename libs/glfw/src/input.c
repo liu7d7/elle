@@ -1345,10 +1345,10 @@ GLFWAPI const char* glfwGetClipboardString(GLFWwindow* handle)
     return _glfwPlatformGetClipboardString();
 }
 
-GLFWAPI float glfw_get_time(void)
+GLFWAPI double glfw_get_time(void)
 {
     _GLFW_REQUIRE_INIT_OR_RETURN(0.0);
-    return (float) (_glfwPlatformGetTimerValue() - _glfw.timer.offset) /
+    return (double)(_glfwPlatformGetTimerValue() - _glfw.timer.offset) /
         _glfwPlatformGetTimerFrequency();
 }
 

@@ -45,7 +45,7 @@ namespace engine {
       return glm::perspective(zoom, aspect_ratio, 0.01f, 1000.f);
     }
 
-    void key(keybind direction, float delta_time);
+    void key(keybind direction, double delta_time);
 
     void move(float x_off, float y_off, bool constrain_pitch = true);
 

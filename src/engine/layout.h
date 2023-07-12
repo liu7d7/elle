@@ -24,8 +24,6 @@ namespace engine {
     [[nodiscard]] const shared_ptr<joint>& at(string const& s) const {
       return joints.at(s);
     }
-
-    struct pose extract_pose();
   };
 
   template<typename T>

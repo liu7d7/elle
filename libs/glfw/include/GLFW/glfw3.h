@@ -5368,7 +5368,7 @@ GLFWAPI const char* glfwGetClipboardString(GLFWwindow* window);
  *
  *  @ingroup input
  */
-GLFWAPI float glfw_get_time(void);
+GLFWAPI double glfw_get_time(void);
 
 /*! @brief Sets the GLFW time.
  *

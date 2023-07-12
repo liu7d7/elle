@@ -63,6 +63,9 @@ vec3 phong() {
   vec3 reflect_dir = reflect(-light_dir, norm);
   float spec = pow(max(dot(view_dir, reflect_dir), 0.0), shininess);
   vec3 specular = spec * get_ks();
+  if (diff < 0.001) {
+    specular = vec3(0.0);
+  }
 
   vec3 result = (ambient + diffuse + specular);
   return result;

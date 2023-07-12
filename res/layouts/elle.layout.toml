@@ -2,7 +2,7 @@
 offset = 0.0
 
 [collarbone]
-offset = 0.6
+offset = 0.475
 parent = "torso"
 
 [neck]
@@ -86,43 +86,43 @@ offset = 0.125
 parent = "collarbone"
 
 [left_bicep]
-offset = 0.25
+offset = 0.225
 parent = "left_shoulder"
 
 [right_bicep]
-offset = 0.25
+offset = 0.225
 parent = "right_shoulder"
 
 [left_hand]
-offset = 0.3
+offset = 0.25
 parent = "left_bicep"
 
 [right_hand]
-offset = 0.3
+offset = 0.25
 parent = "right_bicep"
 
 [left_pelvis]
-offset = 0.125
+offset = 0.0875
 parent = "torso"
 
 [right_pelvis]
-offset = 0.125
+offset = 0.0875
 parent = "torso"
 
 [left_thigh]
-offset = 0.5
+offset = 0.35
 parent = "left_pelvis"
 
 [right_thigh]
-offset = 0.5
+offset = 0.35
 parent = "right_pelvis"
 
 [left_calf]
-offset = 0.45
+offset = 0.3
 parent = "left_thigh"
 
 [right_calf]
-offset = 0.45
+offset = 0.3
 parent = "right_thigh"
 
 [hilt]
