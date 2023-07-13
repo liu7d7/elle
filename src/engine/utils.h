@@ -186,4 +186,9 @@ namespace engine {
     { t.push_model() };
     { t.pop_model() };
   };
+
+  template<typename T>
+  concept is_palette_provider = requires(T const t) {
+    { t.palette } -> std::convertible_to<vector<vec4>>;
+  };
 }

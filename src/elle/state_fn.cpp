@@ -1,6 +1,6 @@
 #include "state_fn.h"
 
-namespace la_magie {
+namespace elle {
 
   void resize(state& s, resize_args const& args) {
     gl_viewport(0, 0, args.width, args.height);
@@ -8,7 +8,16 @@ namespace la_magie {
 
     float ratio = float(args.width) / float(args.height);
     COUT(std::dec << 400 * ratio << ' ' << 400 << '\n')
-    s.half.resize(int(400 * ratio), 400);
+//    s.half.resize(int(400 * ratio), 400);
+    s.half.resize(args.width / 2, args.height / 2);
+  }
+
+  void draw_dot(state& s, vec3 const& vec) {
+    s.push_model();
+    s.model_ref() = glm::translate(s.model_ref(), vec);
+    s.model_ref() = glm::scale(s.model_ref(), vec3{0.05});
+    draw_obj(s, s.dot);
+    s.pop_model();
   }
 
   void draw_main_screen(state& s) {
@@ -24,23 +33,23 @@ namespace la_magie {
   void draw_scene(state& s) {
     s.update_matrices(true);
 
-    float time = float(glfw_get_time()) * 3.5f;
+    float time = float(glfw_get_time()) * 4.f;
     static string last_foot = "";
     static vec3 last_pos{0.f};
     static vec3 offset{0.f};
-    string foot = int((time - half_pi) / pi) % 2 ? "right_calf" : "left_calf";
-    vec3 pos = s.layout.at(foot)->final_pos;
-    if (foot == last_foot) {
-      offset += pos - last_pos;
-    }
-    last_foot = std::move(foot);
-    last_pos = pos;
     s.layout.pose_lerp(s.poses.at("walk_left"), s.poses.at("walk_right"),
                        glm::clamp((sinf(time) + 1) * 0.5f, 0.f, 1.f));
     s.push_model();
     s.model_ref() = glm::translate(s.model_ref(), offset);
     draw_layout(s, s.layout);
     s.pop_model();
+    string foot = int((time - half_pi) / pi) % 2 ? "left_calf" : "right_calf";
+    vec3 pos = s.layout.at(foot)->final_pos;
+    if (foot == last_foot) {
+      offset -= pos - last_pos;
+    }
+    last_foot = std::move(foot);
+    last_pos = pos;
   }
 
   void draw_hud(state& s, draw_args const& args) {
@@ -80,7 +89,7 @@ namespace la_magie {
   }
 
   void draw(state& s, draw_args const& args) {
-    for (int it : {GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT}) {
+    for (int it: {GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT}) {
       if (glfw_get_key(s.app, it) == GLFW_PRESS) {
         s.cam.key(keybind(it), args.delta_time);
       }

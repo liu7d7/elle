@@ -11,31 +11,31 @@
 
 using namespace engine;
 
-namespace la_magie {
+namespace elle {
 
   struct state {
 
-/* =======================================================defs======================================================= */
+/* ====================================================== defs ====================================================== */
 
     using application = app<state>;
     application& app;
 
-/* ======================================================fonts======================================================= */
+/* ===================================================== fonts ====================================================== */
 
     font dank_mono{"res/fonts/Dank Mono Italic.otf", 48};
 
-/* =====================================================matrices===================================================== */
+/* ==================================================== matrices ==================================================== */
 
     mat4 proj{1.};
     mat4 view{1.};
     stack<mat4> model{deque<mat4>{mat4{1.}}};
 
-/* =====================================================shaders====================================================== */
+/* ==================================================== shaders ===================================================== */
 
     shader dither{"res/shaders/postprocess.vert", "res/shaders/dither.frag"};
     shader debug_lines_shader{"res/shaders/debug_lines.vert", "res/shaders/debug_lines.frag"};
 
-/* ==================================================frame buffers=================================================== */
+/* ================================================= frame buffers ================================================== */
 
     frame_buffer half{
       app.width / 2,
@@ -48,28 +48,27 @@ namespace la_magie {
       app.width,
       app.height, {
         {GL_COLOR_ATTACHMENT0, texture_spec{GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_NEAREST, GL_NEAREST}},
-        {GL_DEPTH_ATTACHMENT,
-         texture_spec{GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, GL_NEAREST, GL_NEAREST}}
+        {GL_DEPTH_ATTACHMENT, texture_spec{GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, GL_NEAREST, GL_NEAREST}}
       }
     };
 
-/* ==================================================vertex arrays=================================================== */
+/* ================================================= vertex arrays ================================================== */
 
     vertex_array quad{{2}};
     vertex_array debug_lines{{3, 3}};
 
-/* =====================================================palette====================================================== */
+/* ==================================================== palette ===================================================== */
 
     vec3 dark = vec3(0.24, 0.14, 0.23);
     vec3 light = vec3(0.96, 0.93, 0.9);
     const std::vector<vec4> palette{
-      vec4(0.97, 0.89, 0.77, 1),
-      vec4(0.8, 0.2, 0.58, 0.66),
-      vec4(0.42, 0.12, 0.69, 0.33),
       vec4(0.04, 0.02, 0.19, 0),
+      vec4(0.42, 0.12, 0.69, 0.33),
+      vec4(0.8, 0.2, 0.58, 0.66),
+      vec4(0.97, 0.89, 0.77, 1),
     };
 
-/* ======================================================other======================================================= */
+/* ===================================================== other ====================================================== */
 
     camera cam{};
     layout layout{"res/layouts/elle.layout.toml"};
@@ -81,6 +80,7 @@ namespace la_magie {
       {"start", pose{"res/poses/test.start.toml"}},
       {"finish", pose{"res/poses/test.finish.toml"}},
     };
+    object dot{"res/models/spherewoutlinewide.obj"};
 
     struct {
       string const not_editing{""};

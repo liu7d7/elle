@@ -13,7 +13,7 @@ namespace engine {
   };
 
   struct texture {
-    uint handle;
+    uint handle{};
     int width;
     int height;
     texture_spec spec;

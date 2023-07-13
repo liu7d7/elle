@@ -13,18 +13,20 @@ namespace engine {
 
   template<typename T>
   requires is_model_stack_provider<T> && is_mvp_provider<T>
-  void draw_line(T& m_stack, vec3 a, vec3 b, float width, vec3 color) {
-    vec3 avg = (a + b) * 0.5f;
+  void draw_line(T& s, vec3 a, vec3 b, float width, vec3 color) {
+    auto& [i, j, k, l] = lines_state.cyl->groups.at(0);
+    l.diffuse = color;
+
     vec3 t = normalize(b - a);
 
     mat4 rotation = change_axis(t, 1);
 
     float len = length(b - a);
-    m_stack.push_model();
-    m_stack.model_ref() = m_stack.model_ref() * rotation;
-    m_stack.model_ref() = glm::scale(m_stack.model_ref(), vec3{width, len, width});
-    m_stack.model_ref() = glm::translate(m_stack.model_ref(), a);
-    draw_obj(m_stack, *lines_state.cyl);
-    m_stack.pop_model();
+    s.push_model();
+    s.model_ref() = s.model_ref() * rotation;
+    s.model_ref() = glm::scale(s.model_ref(), vec3{width, len, width});
+    s.model_ref() = glm::translate(s.model_ref(), a);
+    draw_obj(s, *lines_state.cyl);
+    s.pop_model();
   }
 }

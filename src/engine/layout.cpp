@@ -13,6 +13,7 @@ namespace engine {
       j->dark = table->get_as<bool>("dark").value_or(true);
       j->visible = table->get_as<bool>("visible").value_or(true);
       j->width = float(table->get_as<double>("width").value_or(0.03));
+      j->color = int(table->get_as<long long>("color").value_or(-1));
 
       if (auto parent = table->get_as<std::string>("parent")) {
         orphans[*parent].push_back(j);

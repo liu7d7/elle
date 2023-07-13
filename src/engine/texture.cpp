@@ -2,12 +2,13 @@
 #include "stb/stb_image.h"
 #include "logging.h"
 #include "filesystem"
-
-unordered_map<string, tuple<int, int, uint>> precompiled;
+#include "engine/usings.h"
 
 namespace engine {
+  unordered_map<string, tuple<int, int, uint>> precompiled;
+
   texture::texture(int width, int height, texture_spec spec) :
-      width(width), height(height), spec(spec) {
+      width(width), height(height), spec(spec), handle(0) {
     gl_gen_textures(1, &handle);
     gl_bind_texture(GL_TEXTURE_2D, handle);
     gl_tex_parameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);

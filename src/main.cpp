@@ -1,10 +1,8 @@
-#include "la_magie/state_fn.h"
-#include "la_magie/editor.h"
-
-using namespace la_magie;
+#include "elle/state_fn.h"
+#include "elle/editor.h"
 
 int main() {
-  application app{1280, 800, "la magie", load};
+  elle::application app{1280, 800, "la magie", elle::load};
   std::jthread editor_thread{[&app](std::stop_token const& st) {
     while (!st.stop_requested()) {
       if (editor(app)) {
@@ -12,11 +10,11 @@ int main() {
       }
     }
   }};
-  app.mouse_click += mouse_click;
-  app.mouse_move += mouse_move;
-  app.key_press += key_press;
-  app.draw += draw;
-  app.resize += resize;
+  app.mouse_click += elle::mouse_click;
+  app.mouse_move += elle::mouse_move;
+  app.key_press += elle::key_press;
+  app.draw += elle::draw;
+  app.resize += elle::resize;
   app.run();
   editor_thread.request_stop();
   return 0;

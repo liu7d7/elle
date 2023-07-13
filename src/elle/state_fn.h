@@ -2,19 +2,9 @@
 
 #include "state.h"
 
-namespace la_magie {
+namespace elle {
 
   void resize(state&, resize_args const& args);
-
-  void draw_main_screen(state& s);
-
-  void draw_scene(state& s);
-
-  void draw_hud(state& s, draw_args const& args);
-
-  void draw_debug_lines(state& s);
-
-  void draw_dither(state& s);
 
   void draw(state& s, draw_args const& args);
 

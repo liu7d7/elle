@@ -2,9 +2,10 @@
 #include <fstream>
 #include "engine/pose.h"
 #include "glm/detail/type_quat.hpp"
-#include "utils.h"
+#include "engine/utils.h"
+#include "engine/usings.h"
 
-namespace la_magie {
+namespace elle {
   void write_pose(string const& name, pose const& pose) {
     std::ofstream ofs(name);
     ofs << *pose.as_toml();
@@ -26,6 +27,30 @@ namespace la_magie {
     COUT(glm::axis(q) << " " << glm::degrees(glm::angle(q)) << " " << u << " " << v << std::endl)
   }
 
+  void impactful(state& s, string const& editing) {
+    std::stringstream iss{editing};
+    std::string i, joint_id;
+    iss >> i >> joint_id;
+    float x, y, z, ang;
+    iss >> x >> y >> z >> ang;
+    COUT(joint_id << ' ' << x << ' ' << y << ' ' << z << ' ' << ang << std::endl)
+    quat q = glm::angleAxis(glm::radians(ang), vec3{x, y, z});
+    stack<shared_ptr<joint>> joints;
+    joints.push(s.layout.at(joint_id));
+    pose& p = s.poses.at(s.layout_editor.current_pose);
+    while (!joints.empty()) {
+      auto f = joints.top();
+      joints.pop();
+      quat& q1 = p.rotations.at(f->name);
+      COUT(f->name << std::endl)
+      q1 = q * q1;
+      for (const auto& it : f->children) {
+        joints.push(it);
+      }
+    }
+    s.layout.pose(p);
+  }
+
   bool editor(application& m) {
     if (m.state.has_value()) {
       state& s = m.state.value();
@@ -33,34 +58,14 @@ namespace la_magie {
       std::getline(std::cin, editing);
       editing = trim(editing);
 
-      if (editing.starts_with("a") && s.layout.joints.contains(s.layout_editor.current_joint) &&
+      if (editing.starts_with("absolute") && s.layout.joints.contains(s.layout_editor.current_joint) &&
           s.poses.contains(s.layout_editor.current_pose)) {
         absolute(s, editing);
       } else if (editing.starts_with("save") && s.poses.contains(s.layout_editor.current_pose)) {
         string name = trim(editing.substr(4));
         write_pose(name, s.poses.at(s.layout_editor.current_pose));
       } else if (editing.starts_with("impactful")) {
-        std::stringstream iss{editing};
-        std::string i, joint_id;
-        iss >> i >> joint_id;
-        float x, y, z, ang;
-        iss >> x >> y >> z >> ang;
-        COUT(joint_id << ' ' << x << ' ' << y << ' ' << z << ' ' << ang << std::endl)
-        quat q = glm::angleAxis(glm::radians(ang), vec3{x, y, z});
-        stack<shared_ptr<joint>> joints;
-        joints.push(s.layout.at(joint_id));
-        pose& p = s.poses.at(s.layout_editor.current_pose);
-        while (!joints.empty()) {
-          auto f = joints.top();
-          joints.pop();
-          quat& q1 = p.rotations.at(f->name);
-          COUT(f->name << std::endl)
-          q1 = q * q1;
-          for (const auto& it : f->children) {
-            joints.push(it);
-          }
-        }
-        s.layout.pose(p);
+        impactful(s, editing);
       } else if (editing.starts_with("quit")) {
         glfw_set_window_should_close(m, true);
         return true;

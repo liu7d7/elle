@@ -10,15 +10,13 @@ namespace engine {
 
   object::object(string const& path) : path(path) {
     if (!std::filesystem::exists(std::filesystem::path(path.c_str()))) {
-      COUT("ERROR::OBJECT::FILE_NOT_FOUND: " << path << '\n')
-      return;
+      throw std::runtime_error("object: file not found at " + path);
     }
 
     Assimp::Importer importer;
     aiScene const* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-      COUT("ERROR::ASSIMP:: " << importer.GetErrorString() << '\n')
-      return;
+      throw std::runtime_error(string("assimp: file not found at ") + importer.GetErrorString());
     }
 
     string dir = path.substr(0, path.find_last_of('/'));

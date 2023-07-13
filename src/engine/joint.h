@@ -13,7 +13,8 @@ namespace engine {
     vector<shared_ptr<joint>> children;
     shared_ptr<joint> parent{nullptr};
     quat rot{glm::identity<quat>()};
-    vec3 final_pos{0.};
+    mutable vec3 final_pos{0.};
+    int color{-1};
     float offset{};
     float width{0.03f};
     bool dark{};
@@ -28,13 +29,16 @@ namespace engine {
   };
 
   template<typename T>
-  requires is_model_stack_provider<T> && is_mvp_provider<T>
+  requires is_model_stack_provider<T> && is_mvp_provider<T> && is_palette_provider<T>
   void draw_joint(T& m_stack, joint const& j, int depth = 0) {
     m_stack.push_model();
     vec3 offset = j.rot * vec3{0, j.offset, 0};
+    if (j.parent) {
+      j.final_pos = j.parent->final_pos + offset;
+    }
 
     if (j.visible && j.parent) {
-      draw_line(m_stack, {0, 0, 0}, offset, j.width, vec3{0});
+      draw_line(m_stack, {0, 0, 0}, offset, j.width, j.color == -1 ? vec3{0} : m_stack.palette.at(j.color));
     }
 
     m_stack.model_ref() = glm::translate(m_stack.model_ref(), offset);
@@ -48,7 +52,6 @@ namespace engine {
     }
 
     for (auto const& c : j.children) {
-      c->final_pos = j.final_pos + offset;
       draw_joint(m_stack, *c, depth + 1);
     }
 

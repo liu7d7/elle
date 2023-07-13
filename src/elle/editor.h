@@ -1,10 +1,9 @@
 #pragma once
 
-#include "usings.h"
 #include "state.h"
 
 using namespace engine;
 
-namespace la_magie {
+namespace elle {
   bool editor(application& m);
 }
