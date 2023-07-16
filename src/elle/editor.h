@@ -5,5 +5,5 @@
 using namespace engine;
 
 namespace elle {
-  bool editor(application& m);
+  bool editor(application_t& m);
 }

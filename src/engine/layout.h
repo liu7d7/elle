@@ -17,13 +17,15 @@ namespace engine {
 
     explicit layout(string const& path);
 
-    void pose_lerp(pose const& begin, pose const& end, float delta);
+    void pose(struct pose const& p);
 
-    void pose(pose const& p);
+    void pose_lerp(struct pose const& begin, struct pose const& end, float delta);
 
     [[nodiscard]] const shared_ptr<joint>& at(string const& s) const {
       return joints.at(s);
     }
+
+    struct pose extract_rotation();
   };
 
   template<typename T>

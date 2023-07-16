@@ -2,7 +2,7 @@
 #include "elle/editor.h"
 
 int main() {
-  elle::application app{1280, 800, "la magie", elle::load};
+  elle::application_t app{1280, 800, "la magie", elle::load};
   std::jthread editor_thread{[&app](std::stop_token const& st) {
     while (!st.stop_requested()) {
       if (editor(app)) {

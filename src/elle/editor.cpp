@@ -51,7 +51,7 @@ namespace elle {
     s.layout.pose(p);
   }
 
-  bool editor(application& m) {
+  bool editor(application_t& m) {
     if (m.state.has_value()) {
       state& s = m.state.value();
       string editing;

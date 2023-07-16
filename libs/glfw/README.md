@@ -162,7 +162,7 @@ information on what to include when reporting a bug.
  - [Wayland] Bugfix: Lock key modifier bits were only set when lock keys were pressed
  - [Wayland] Bugfix: A window leaving full screen mode would be iconified (#1995)
  - [Wayland] Bugfix: A window leaving full screen mode ignored its desired size
- - [Wayland] Bugfix: `glfwSetWindowMonitor` did not update windowed mode size
+ - [Wayland] Bugfix: `glfwSetWindowMonitor` did not quick_update windowed mode size
  - [Wayland] Bugfix: `glfwRestoreWindow` would make a full screen window windowed
  - [Wayland] Bugfix: A window maximized or restored by the user would enter an
    inconsistent state

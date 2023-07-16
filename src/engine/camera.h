@@ -27,6 +27,8 @@ namespace engine {
     float speed;
     float sensitivity;
     float zoom;
+    float third_person_dist{5};
+    bool third_person{false};
 
     explicit camera(vec3 position = default_pos, vec3 up = default_up, float yaw = default_yaw,
                     float pitch = default_pitch);
@@ -34,11 +36,24 @@ namespace engine {
     camera(float pos_x, float pos_y, float pos_z, float up_x, float up_y, float up_z, float yaw, float pitch);
 
     [[nodiscard]] inline vec3 eye() const {
+      if (third_person) {
+        return pos - front * third_person_dist;
+      }
+
       return pos;
     }
 
+    [[nodiscard]] inline vec3 target() const {
+      if (third_person) {
+        return pos;
+      }
+
+      return pos + front;
+    }
+
     [[nodiscard]] inline mat4 get_view() const {
-      return glm::lookAt(eye(), pos + front, up);
+
+      return glm::lookAt(eye(), target(), up);
     }
 
     [[nodiscard]] inline mat4 get_proj(float aspect_ratio) const {
