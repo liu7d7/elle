@@ -8,7 +8,6 @@ namespace elle {
 
     float ratio = float(args.width) / float(args.height);
     COUT(std::dec << 400 * ratio << ' ' << 400 << '\n')
-//    s.half.resize(int(400 * ratio), 400);
     s.half.resize(args.width / 2, args.height / 2);
   }
 
@@ -33,23 +32,7 @@ namespace elle {
   void draw_scene(state& s) {
     s.update_matrices(true);
 
-    float time = float(glfw_get_time()) * 4.f;
-    static string last_foot = "";
-    static vec3 last_pos{0.f};
-    static vec3 offset{0.f};
-    s.layout.pose_lerp(s.poses.at("walk_left"), s.poses.at("walk_right"),
-                       glm::clamp((sinf(time) + 1) * 0.5f, 0.f, 1.f));
-    s.push_model();
-    s.model_ref() = glm::translate(s.model_ref(), offset);
-    draw_layout(s, s.layout);
-    s.pop_model();
-    string foot = int((time - half_pi) / pi) % 2 ? "left_calf" : "right_calf";
-    vec3 pos = s.layout.at(foot)->final_pos;
-    if (foot == last_foot) {
-      offset -= pos - last_pos;
-    }
-    last_foot = std::move(foot);
-    last_pos = pos;
+
   }
 
   void draw_hud(state& s, draw_args const& args) {
@@ -127,7 +110,7 @@ namespace elle {
     }
   }
 
-  state load(application& app) {
+  state load(application_t& app) {
     COUT(app.widthf << ' ' << app.heightf << '\n')
     gl_enable(GL_BLEND);
     gl_blend_func(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

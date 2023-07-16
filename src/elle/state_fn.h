@@ -14,5 +14,5 @@ namespace elle {
 
   void key_press(state& s, key_args const& args);
 
-  state load(application& app);
+  state load(application_t& app);
 }

@@ -17,8 +17,8 @@ namespace elle {
 
 /* ====================================================== defs ====================================================== */
 
-    using application = app<state>;
-    application& app;
+    using application_t = app<state>;
+    application_t& app;
 
 /* ===================================================== fonts ====================================================== */
 
@@ -48,7 +48,8 @@ namespace elle {
       app.width,
       app.height, {
         {GL_COLOR_ATTACHMENT0, texture_spec{GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_NEAREST, GL_NEAREST}},
-        {GL_DEPTH_ATTACHMENT, texture_spec{GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, GL_NEAREST, GL_NEAREST}}
+        {GL_DEPTH_ATTACHMENT,
+         texture_spec{GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, GL_NEAREST, GL_NEAREST}}
       }
     };
 
@@ -71,15 +72,16 @@ namespace elle {
 /* ===================================================== other ====================================================== */
 
     camera cam{};
-    layout layout{"res/layouts/elle.layout.toml"};
+    layout elle{"res/layouts/elle.layout.toml"};
     unordered_map<string, pose> poses{
-      {"identity", pose{"res/poses/identity.toml"}},
-      {"standing", pose{"res/poses/elle.standing.toml"}},
-      {"walk_left", pose{"res/poses/elle.walk_left.toml"}},
+      {"identity",   pose{"res/poses/identity.toml"}},
+      {"standing",   pose{"res/poses/elle.standing.toml"}},
+      {"walk_left",  pose{"res/poses/elle.walk_left.toml"}},
       {"walk_right", pose{"res/poses/elle.walk_right.toml"}},
-      {"start", pose{"res/poses/test.start.toml"}},
-      {"finish", pose{"res/poses/test.finish.toml"}},
+      {"start",      pose{"res/poses/test.start.toml"}},
+      {"finish",     pose{"res/poses/test.finish.toml"}},
     };
+
     object dot{"res/models/spherewoutlinewide.obj"};
 
     struct {
@@ -90,7 +92,7 @@ namespace elle {
       int ax = 0;
     } layout_editor;
 
-    explicit state(application& app) :
+    explicit state(application_t& app) :
       app(app),
       proj{get_ortho(app.width, app.height)} {
       quad.set_vertex_data(vector<float>{
@@ -163,6 +165,6 @@ namespace elle {
 
   };
 
-  using application = state::application;
+  using application_t = state::application_t;
 
 }

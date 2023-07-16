@@ -23,7 +23,7 @@ namespace elle {
     constexpr auto u = vec3{0, 1, 0};
     quat q = u_to_v(u, v);
     s.poses.at(s.layout_editor.current_pose).rotations[s.layout_editor.current_joint] = q;
-    s.layout.pose(s.poses.at(s.layout_editor.current_pose));
+    s.elle.pose(s.poses.at(s.layout_editor.current_pose));
     COUT(glm::axis(q) << " " << glm::degrees(glm::angle(q)) << " " << u << " " << v << std::endl)
   }
 
@@ -36,7 +36,7 @@ namespace elle {
     COUT(joint_id << ' ' << x << ' ' << y << ' ' << z << ' ' << ang << std::endl)
     quat q = glm::angleAxis(glm::radians(ang), vec3{x, y, z});
     stack<shared_ptr<joint>> joints;
-    joints.push(s.layout.at(joint_id));
+    joints.push(s.elle.at(joint_id));
     pose& p = s.poses.at(s.layout_editor.current_pose);
     while (!joints.empty()) {
       auto f = joints.top();
@@ -48,17 +48,17 @@ namespace elle {
         joints.push(it);
       }
     }
-    s.layout.pose(p);
+    s.elle.pose(p);
   }
 
-  bool editor(application& m) {
+  bool editor(application_t& m) {
     if (m.state.has_value()) {
       state& s = m.state.value();
       string editing;
       std::getline(std::cin, editing);
       editing = trim(editing);
 
-      if (editing.starts_with("absolute") && s.layout.joints.contains(s.layout_editor.current_joint) &&
+      if (editing.starts_with("absolute") && s.elle.joints.contains(s.layout_editor.current_joint) &&
           s.poses.contains(s.layout_editor.current_pose)) {
         absolute(s, editing);
       } else if (editing.starts_with("save") && s.poses.contains(s.layout_editor.current_pose)) {
@@ -73,7 +73,7 @@ namespace elle {
         editing = trim(editing.substr(4));
         if (s.poses.contains(editing)) {
           s.layout_editor.current_pose = editing;
-          s.layout.pose(s.poses.at(editing));
+          s.elle.pose(s.poses.at(editing));
           COUT("editing " << editing << std::endl)
         } else {
           COUT("not a joint" << std::endl)
@@ -81,7 +81,7 @@ namespace elle {
         }
       } else if (editing.starts_with("joint")) {
         editing = trim(editing.substr(5));
-        if (s.layout.joints.contains(editing)) {
+        if (s.elle.joints.contains(editing)) {
           s.layout_editor.current_joint = editing;
           COUT("editing joint " << editing << std::endl)
         } else {
