@@ -72,16 +72,6 @@ namespace elle {
 /* ===================================================== other ====================================================== */
 
     camera cam{};
-    layout elle{"res/layouts/elle.layout.toml"};
-    unordered_map<string, pose> poses{
-      {"identity",   pose{"res/poses/identity.toml"}},
-      {"standing",   pose{"res/poses/elle.standing.toml"}},
-      {"walk_left",  pose{"res/poses/elle.walk_left.toml"}},
-      {"walk_right", pose{"res/poses/elle.walk_right.toml"}},
-      {"start",      pose{"res/poses/test.start.toml"}},
-      {"finish",     pose{"res/poses/test.finish.toml"}},
-    };
-
     object dot{"res/models/spherewoutlinewide.obj"};
 
     struct {
